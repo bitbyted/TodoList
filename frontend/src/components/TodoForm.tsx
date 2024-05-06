@@ -1,6 +1,11 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
+import {TodoProps} from './TodoWrapper';
+interface addTaskProps {
+  addTask: (todo: NewTodo) => void;
+}
+type NewTodo = Omit<TodoProps, '_id'>;
 
-export const TodoForm = ({addTask}) => {
+export const TodoForm = ({addTask}: addTaskProps) => {
   const [value, setValue] = useState('');
   return (
     <div className='TodoForm'>

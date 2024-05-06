@@ -1,9 +1,16 @@
-import React from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faPenToSquare} from '@fortawesome/free-solid-svg-icons';
 import {faTrash} from '@fortawesome/free-solid-svg-icons';
+import {TodoProps} from './TodoWrapper';
 
-export const Todo = ({todo, editTodo, deletedTodo, handleCompleted}) => {
+interface AnotherTodoProps {
+  editTodo: (id: string) => void;
+  deletedTodo: (id: string) => void;
+  handleCompleted: (id: string) => void;
+  todo: TodoProps;
+}
+
+export const Todo = ({todo, editTodo, deletedTodo, handleCompleted}: AnotherTodoProps) => {
   return (
     <div className='Todo'>
       <p onClick={() => handleCompleted(todo._id)} className={`${todo.completed ? 'completed' : 'incompleted'}`}>

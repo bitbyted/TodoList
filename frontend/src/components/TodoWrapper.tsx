@@ -1,13 +1,20 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {TodoForm} from './TodoForm';
 import {Todo} from './Todo';
 import axios from 'axios';
 
 import {EditTodoForm} from './EditTodoForm';
 
+export interface TodoProps {
+  _id: string;
+  task: string;
+  isEditing: Boolean;
+  completed: Boolean;
+}
+
 // {id: xx, task: xx, completed: xx, isEditing:xx }
 export const TodoWrapper = () => {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState<TodoProps[]>([]);
   const fetchData = async () => {
     const result = await axios.get('http://localhost:3001/');
     setTodos(result.data);
@@ -19,7 +26,7 @@ export const TodoWrapper = () => {
   useEffect(() => {
     fetchData();
   }, []);
-  const addTask = async (todo) => {
+  const addTask = async (todo: TodoProps) => {
     const result = await axios.post(`http://localhost:3001/add`, todo);
     setTodos([...todos, result.data]);
   };
@@ -27,7 +34,7 @@ export const TodoWrapper = () => {
   //   const editTodo = ()=>{
   //  const updatedIndex = (todo.id)
   //   }
-  const deletedTodo = async (_id) => {
+  const deletedTodo = async (_id: string) => {
     const result = await axios.delete(`http://localhost:3001/delete/${_id}`);
     setTodos((todos) => todos.filter((todo) => todo._id !== result.data._id));
 
@@ -45,7 +52,7 @@ export const TodoWrapper = () => {
     // setTodos(newTodos);
   };
 
-  const handleCompleted = (_id) => {
+  const handleCompleted = (_id: string) => {
     const completedIndex = todos.findIndex((todo) => todo._id === _id);
 
     const newTodos = [...todos];
@@ -53,13 +60,13 @@ export const TodoWrapper = () => {
 
     setTodos(newTodos);
   };
-  const editTodo = (_id) => {
+  const editTodo = (_id: string) => {
     const editIndex = todos.findIndex((todo) => todo._id === _id);
     const newTodos = [...todos];
     newTodos[editIndex].isEditing = !todos[editIndex].isEditing;
     setTodos(newTodos);
   };
-  const updateTodo = async (value, _id) => {
+  const updateTodo = async (value: string, _id: string) => {
     const result = await axios.post('http://localhost:3001/update', {task: value, _id: _id});
     const updatedIndex = todos.findIndex((todo) => todo._id === _id);
     const newTodos = [...todos];
