@@ -2,11 +2,11 @@ import {useState} from 'react';
 import {TodoProps} from './TodoWrapper';
 
 interface EditTodoFormProps {
-  updateTodo: (value: string, _id: string) => void;
+  handleUpdateTodo: (value: string, _id: string) => void;
   todo: TodoProps;
 }
 
-export const EditTodoForm = ({todo, updateTodo}: EditTodoFormProps) => {
+export const EditTodoForm = ({todo, handleUpdateTodo}: EditTodoFormProps) => {
   // TODO: 为什么这个todo.value在组件mount的时候是undefined
   const [value, setValue] = useState(todo.task ?? '');
   // ? :
@@ -16,7 +16,7 @@ export const EditTodoForm = ({todo, updateTodo}: EditTodoFormProps) => {
       <button
         className='todo-btn'
         onClick={() => {
-          updateTodo(value, todo._id);
+          handleUpdateTodo(value, todo._id);
           setValue('');
         }}>
         Update todo

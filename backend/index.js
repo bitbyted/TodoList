@@ -56,3 +56,12 @@ app.delete('/delete/:id', async (req, res) => {
     console.log('error', error);
   }
 });
+app.post('/complete/:id', async (req, res) => {
+  try {
+    const {_id, completed} = req.body;
+    const result = await TodoModel.findByIdAndUpdate(_id, {completed: !completed}, {new: true});
+    res.send(result);
+  } catch (error) {
+    console.log('error', error);
+  }
+});

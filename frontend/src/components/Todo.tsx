@@ -4,21 +4,21 @@ import {faTrash} from '@fortawesome/free-solid-svg-icons';
 import {TodoProps} from './TodoWrapper';
 
 interface AnotherTodoProps {
-  editTodo: (id: string) => void;
-  deletedTodo: (id: string) => void;
-  handleCompleted: (id: string) => void;
+  handleEditTodo: (todo: TodoProps) => void;
+  handleDeletedTodo: (id: string) => void;
+  handleCompleted: (id: string, completed: Boolean) => void;
   todo: TodoProps;
 }
 
-export const Todo = ({todo, editTodo, deletedTodo, handleCompleted}: AnotherTodoProps) => {
+export const Todo = ({todo, handleEditTodo, handleDeletedTodo, handleCompleted}: AnotherTodoProps) => {
   return (
     <div className='Todo'>
-      <p onClick={() => handleCompleted(todo._id)} className={`${todo.completed ? 'completed' : 'incompleted'}`}>
+      <p onClick={() => handleCompleted(todo._id, todo.completed)} className={`${todo.completed ? 'completed' : 'incompleted'}`}>
         {todo.task}
       </p>
       <div>
-        <FontAwesomeIcon className='edit-icon' icon={faPenToSquare} onClick={() => editTodo(todo._id)} />
-        <FontAwesomeIcon className='delete-icon' icon={faTrash} onClick={() => deletedTodo(todo._id)} />
+        <FontAwesomeIcon className='edit-icon' icon={faPenToSquare} onClick={() => handleEditTodo(todo)} />
+        <FontAwesomeIcon className='delete-icon' icon={faTrash} onClick={() => handleDeletedTodo(todo._id)} />
       </div>
     </div>
   );

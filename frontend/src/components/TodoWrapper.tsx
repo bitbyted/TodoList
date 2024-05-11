@@ -1,7 +1,8 @@
 import {useEffect, useState} from 'react';
 import {TodoForm} from './TodoForm';
 import {Todo} from './Todo';
-import axios from 'axios';
+import {fetchData, editTodo, addNewTodo, AddedTodo, updateTodo, deleteTodo, completeTodo} from '../store/todosSlices';
+import {useAppSelector, useAppDispatch} from '../store/hooks';
 
 import {EditTodoForm} from './EditTodoForm';
 
@@ -12,86 +13,46 @@ export interface TodoProps {
   completed: Boolean;
 }
 
-// {id: xx, task: xx, completed: xx, isEditing:xx }
 export const TodoWrapper = () => {
+  const todosFromRedux = useAppSelector((state) => state.todosSlice.todos);
+  console.log('todosFromRedux', todosFromRedux);
+
+  const dispatch = useAppDispatch();
+
   const [todos, setTodos] = useState<TodoProps[]>([]);
-  const fetchData = async () => {
-    const result = await axios.get('http://localhost:3001/');
-    setTodos(result.data);
-  };
-  // const fetchDataById = async (id) => {
-  //   const result = await axios.get(`http://localhost:3001/${id}`);
-  //   console.log('fetchDataById', result);
-  // };
+
   useEffect(() => {
-    fetchData();
-  }, []);
-  const addTask = async (todo: TodoProps) => {
-    const result = await axios.post(`http://localhost:3001/add`, todo);
-    setTodos([...todos, result.data]);
+    dispatch(fetchData()).unwrap();
+  }, [dispatch]);
+
+  const addTask = async (todo: AddedTodo) => {
+    dispatch(addNewTodo(todo));
+    // const result = await axios.post(`http://localhost:3001/add`, todo);
+    // setTodos([...todos, result.data]);
   };
 
-  //   const editTodo = ()=>{
-  //  const updatedIndex = (todo.id)
-  //   }
-  const deletedTodo = async (_id: string) => {
-    const result = await axios.delete(`http://localhost:3001/delete/${_id}`);
-    setTodos((todos) => todos.filter((todo) => todo._id !== result.data._id));
-
-    console.log(result, 'result');
-    // const deleteIndex = todos.findIndex((todo) => todo.id === id);
-    // // 不能直接操作todos
-    // // const newTodos = [...todos]
-    // // newTodos.splice(deleteIndex,1)
-
-    // // setTodos(newTodos);
-    // //slice
-    // const newTodos = [...todos.slice(0, deleteIndex), ...todos.slice(deleteIndex + 1, todos.length)];
-    // console.log('newTodos', newTodos);
-
-    // setTodos(newTodos);
+  const handleDeletedTodo = async (_id: string) => {
+    dispatch(deleteTodo(_id));
   };
 
-  const handleCompleted = (_id: string) => {
-    const completedIndex = todos.findIndex((todo) => todo._id === _id);
-
-    const newTodos = [...todos];
-    newTodos[completedIndex].completed = !todos[completedIndex].completed;
-
-    setTodos(newTodos);
+  const handleCompleted = (_id: string, completed: boolean) => {
+    dispatch(completeTodo({_id, completed}));
   };
-  const editTodo = (_id: string) => {
-    const editIndex = todos.findIndex((todo) => todo._id === _id);
-    const newTodos = [...todos];
-    newTodos[editIndex].isEditing = !todos[editIndex].isEditing;
-    setTodos(newTodos);
+  const handleEditTodo = (todo) => {
+    dispatch(editTodo(todo));
   };
-  const updateTodo = async (value: string, _id: string) => {
-    const result = await axios.post('http://localhost:3001/update', {task: value, _id: _id});
-    const updatedIndex = todos.findIndex((todo) => todo._id === _id);
-    const newTodos = [...todos];
-    newTodos[updatedIndex].task = result.data.task;
-    newTodos[updatedIndex].isEditing = false;
-    setTodos(newTodos);
+  const handleUpdateTodo = async (value: string, _id: string) => {
+    dispatch(updateTodo({value, _id}));
+  };
 
-    // console.log('updatedIndex', updatedIndex);
-    // const newTodos = [...todos];
-    // // [2,4,6,8]
-    // // [{a: { b: 33}}]
-    // newTodos[updatedIndex].task = value;
-    // console.log(value, 'new incoming value');
-    // newTodos[updatedIndex].isEditing = false;
-    // console.log('newTodos', newTodos);
-    // setTodos(newTodos);
-  };
   return (
     <div className='TodoWrapper'>
       <TodoForm addTask={addTask} />
-      {todos.map((todo) =>
+      {todosFromRedux.map((todo) =>
         todo.isEditing ? (
-          <EditTodoForm todo={todo} key={todo._id} updateTodo={updateTodo} />
+          <EditTodoForm todo={todo} key={todo._id} handleUpdateTodo={handleUpdateTodo} />
         ) : (
-          <Todo todo={todo} key={todo._id} deletedTodo={deletedTodo} handleCompleted={handleCompleted} editTodo={editTodo} />
+          <Todo todo={todo} key={todo._id} handleDeletedTodo={handleDeletedTodo} handleCompleted={handleCompleted} handleEditTodo={handleEditTodo} />
         )
       )}
     </div>
