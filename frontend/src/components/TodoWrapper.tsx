@@ -19,6 +19,8 @@ export const TodoWrapper = () => {
 
   const dispatch = useAppDispatch();
 
+  const [todos, setTodos] = useState<TodoProps[]>([]);
+
   useEffect(() => {
     dispatch(fetchData()).unwrap();
   }, [dispatch]);
