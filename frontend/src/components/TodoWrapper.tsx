@@ -9,8 +9,8 @@ import {EditTodoForm} from './EditTodoForm';
 export interface TodoProps {
   _id: string;
   task: string;
-  isEditing: Boolean;
-  completed: Boolean;
+  isEditing: boolean;
+  completed: boolean;
 }
 
 export const TodoWrapper = () => {
@@ -18,8 +18,6 @@ export const TodoWrapper = () => {
   console.log('todosFromRedux', todosFromRedux);
 
   const dispatch = useAppDispatch();
-
-  const [todos, setTodos] = useState<TodoProps[]>([]);
 
   useEffect(() => {
     dispatch(fetchData()).unwrap();
@@ -38,8 +36,8 @@ export const TodoWrapper = () => {
   const handleCompleted = (_id: string, completed: boolean) => {
     dispatch(completeTodo({_id, completed}));
   };
-  const handleEditTodo = (todo) => {
-    dispatch(editTodo(todo));
+  const handleEditTodo = (_id) => {
+    dispatch(editTodo(_id));
   };
   const handleUpdateTodo = async (value: string, _id: string) => {
     dispatch(updateTodo({value, _id}));

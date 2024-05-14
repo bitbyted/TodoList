@@ -49,9 +49,9 @@ export const todosSlice = createSlice({
   name: 'todolist',
   initialState,
   reducers: {
-    editTodo: (state, {payload, type}: PayloadAction<TodoProps>) => {
-      const updateIndex = state.todos.findIndex((todo) => todo._id === payload._id);
-      state.todos[updateIndex].isEditing = !payload.isEditing;
+    editTodo: (state, {payload}: PayloadAction<TodoProps['_id']>) => {
+      const updateIndex = state.todos.findIndex((todo) => todo._id === payload);
+      state.todos[updateIndex].isEditing = true;
     },
   },
   extraReducers: (builder) => {

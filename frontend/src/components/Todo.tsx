@@ -5,20 +5,20 @@ import {TodoProps} from './TodoWrapper';
 
 interface NewTodoProps {
   todo: TodoProps;
-  editTodo: (_id: string) => void;
-  deletedTodo: (_id: string) => void;
-  handleCompleted: (_id: string) => void;
+  handleEditTodo: (_id: string) => void;
+  handleDeletedTodo: (_id: string) => void;
+  handleCompleted: (_id: string, completed: boolean) => void;
 }
 
-export const Todo = ({todo, editTodo, deletedTodo, handleCompleted}: NewTodoProps) => {
+export const Todo = ({todo, handleEditTodo, handleDeletedTodo, handleCompleted}: NewTodoProps) => {
   return (
     <div className='Todo'>
-      <p onClick={() => handleCompleted(todo._id)} className={`${todo.completed ? 'completed' : 'incompleted'}`}>
+      <p onClick={() => handleCompleted(todo._id, todo.completed)} className={`${todo.completed ? 'completed' : 'incompleted'}`}>
         {todo.task}
       </p>
       <div>
-        <FontAwesomeIcon className='edit-icon' icon={faPenToSquare} onClick={() => editTodo(todo._id)} />
-        <FontAwesomeIcon className='delete-icon' icon={faTrash} onClick={() => deletedTodo(todo._id)} />
+        <FontAwesomeIcon className='edit-icon' icon={faPenToSquare} onClick={() => handleEditTodo(todo._id)} />
+        <FontAwesomeIcon className='delete-icon' icon={faTrash} onClick={() => handleDeletedTodo(todo._id)} />
       </div>
     </div>
   );
