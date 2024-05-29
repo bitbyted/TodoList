@@ -124,7 +124,7 @@ const tokenAuth = (req, res, next) => {
       req.userEmail = useremail;
       next();
     } catch (error) {
-      console.log(error, 'error');
+      return res.json({status: 401, error: 'token is invalid'});
     }
   }
 };
@@ -133,7 +133,6 @@ app.post('/userData', tokenAuth, async (req, res) => {
   const {userEmail} = req;
   try {
     UserModel.findOne({email: userEmail}).then((data) => {
-      // TODO: if don't have this user or verify unsuccessful
       res.send({status: 'ok', data: data});
     });
   } catch (error) {

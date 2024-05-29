@@ -1,5 +1,6 @@
 import './App.css';
 import LoginForm from './components/LoginForm';
+import SignUp from './components/SignUp';
 import {TodoWrapper} from './components/TodoWrapper';
 import {UserDetail} from './components/UserDetail';
 import {BrowserRouter as Router, Route, Routes, Link} from 'react-router-dom';
@@ -14,11 +15,15 @@ function App() {
         <div>
           <Link to='/login'>Login</Link>
         </div>
+        <div>
+          <Link to='/signup'>SignUp</Link>
+        </div>
 
         <Routes>
           <Route path='/' element={<TodoWrapper />} />
           <Route path='/login' element={<LoginForm />} />
           <Route path='/userdetail' element={<UserDetail />} />
+          <Route path='/signup' element={<SignUp />} />
         </Routes>
       </div>
     </Router>
